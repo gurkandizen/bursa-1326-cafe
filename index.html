@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gün 8 — DOM - 1</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Görev: aynı sayfayı Grid ile yeniden kurgula. -->
+
+  <!-- Sayfa genelinde kullanılan yıldız kafesi motifi -->
+  <svg class="motif-defs" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <g id="yildiz">
+        <path d="M0,-24 L24,0 L0,24 L-24,0 Z" />
+        <path d="M-17,-17 L17,-17 L17,17 L-17,17 Z" />
+      </g>
+      <g id="baklava">
+        <path d="M0,-10 L10,0 L0,10 L-10,0 Z" />
+      </g>
+
+      <pattern id="kafes" width="96" height="96" patternUnits="userSpaceOnUse">
+        <g fill="none" stroke="currentColor" stroke-width="1.1">
+          <use href="#yildiz" transform="translate(48,48)" />
+          <use href="#yildiz" transform="translate(0,0)" />
+          <use href="#yildiz" transform="translate(96,0)" />
+          <use href="#yildiz" transform="translate(0,96)" />
+          <use href="#yildiz" transform="translate(96,96)" />
+
+          <use href="#baklava" transform="translate(48,0)" />
+          <use href="#baklava" transform="translate(48,96)" />
+          <use href="#baklava" transform="translate(0,48)" />
+          <use href="#baklava" transform="translate(96,48)" />
+        </g>
+      </pattern>
+
+      <!-- Menü gravürleri (çizgi işi) -->
+      <g id="ikon-dal" fill="none" stroke="currentColor" stroke-width="2"
+         stroke-linecap="round" stroke-linejoin="round">
+        <path d="M50 116 C50 92 50 62 50 22"/>
+        <path d="M50 86 C36 83 26 71 28 57 C42 59 50 71 50 86"/>
+        <path d="M50 86 C64 83 74 71 72 57 C58 59 50 71 50 86"/>
+        <path d="M50 61 C38 59 30 49 32 38 C43 40 50 50 50 61"/>
+        <path d="M50 61 C62 59 70 49 68 38 C57 40 50 50 50 61"/>
+        <path d="M50 86 C45 79 39 71 34 61" opacity="0.5"/>
+        <path d="M50 86 C55 79 61 71 66 61" opacity="0.5"/>
+        <circle cx="44" cy="24" r="5"/>
+        <circle cx="56" cy="19" r="5"/>
+        <circle cx="51" cy="30" r="5"/>
+      </g>
+
+      <g id="kose-dal" fill="none" stroke="currentColor" stroke-width="1.6"
+         stroke-linecap="round" stroke-linejoin="round">
+        <path d="M6 6 C 22 10, 32 20, 36 36"/>
+        <path d="M11 7 C 6 13, 7 20, 13 22 C 15 15, 13 9, 11 7 Z"/>
+        <path d="M20 13 C 14 18, 14 26, 20 29 C 24 22, 23 16, 20 13 Z"/>
+        <path d="M29 23 C 24 29, 25 36, 31 38 C 34 31, 32 26, 29 23 Z"/>
+        <circle cx="6" cy="6" r="2" fill="currentColor" stroke="none"/>
+      </g>
+    </defs>
+  </svg>
+
+  <header>
+    <a href="#home" class="logo">
+      <svg width="24" height="24" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <ellipse cx="14" cy="14" rx="9" ry="11" stroke="currentColor" stroke-width="1.2"/>
+        <path d="M6 10 C 12 12, 16 12, 22 10" stroke="currentColor" stroke-width="1" fill="none"/>
+        <path d="M5 14 C 12 16, 16 16, 23 14" stroke="currentColor" stroke-width="1" fill="none"/>
+        <path d="M6 18 C 12 20, 16 20, 22 18" stroke="currentColor" stroke-width="1" fill="none"/>
+      </svg>
+      1326 BURSA
+    </a>
+
+    <!-- açılır-kapanır menü -->
+    <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-label="Menüyü aç veya kapat" />
+    <label for="nav-toggle" class="nav-burger" title="Menü">
+      <span></span>
+      <span></span>
+      <span></span>
+    </label>
+
+    <nav class="main-nav">
+      <ul class="nav-list">
+        <li class="nav-item"><a href="#home" class="nav-link">Ana Sayfa</a></li>
+        <li class="nav-item"><a href="#about" class="nav-link">Hakkımızda</a></li>
+        <li class="nav-item"><a href="#process" class="nav-link">Süreç</a></li>
+        <li class="nav-item"><a href="#menu" class="nav-link">Menü</a></li>
+        <li class="nav-item"><a href="#contact" class="nav-link">İletişim</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- HOME -->
+    <section id="home" class="hero-section">
+      <svg class="hero-kafes" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+        <rect width="100%" height="100%" fill="url(#kafes)" />
+      </svg>
+
+      <div class="container hero-container">
+        <div class="hero-content">
+          <span class="hero-eyebrow">Bursa · Kuruluş 1326</span>
+          <h1 class="hero-title">Şehrin ilk sabah kahvesi</h1>
+          <p class="hero-slogan">
+            Aynı topraklarda, aynı sıcaklıkla. Çekirdeği tanıyıp gününüze göre kavuran,
+            fincanı acelesiz dolduran bir kahve dükkânı.
+          </p>
+          <div class="hero-actions">
+            <a href="#contact" class="btn btn-primary">Rezervasyon yap</a>
+            <a href="#menu" class="btn btn-ghost">Menüyü incele</a>
+          </div>
+        </div>
+
+        <div class="seal" aria-hidden="true">
+          <span class="seal-year">1326</span>
+          <span class="seal-label">BURSA</span>
+        </div>
+      </div>
+
+      <div class="container hero-meta">
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Kavurma</span>
+          <span class="hero-meta-value">Her sabah, dükkânın arkasında</span>
+        </div>
+        
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Adres</span>
+          <span class="hero-meta-value">Üniversite Cd. No: 15, Görükle</span>
+        </div>
+        
+        <div class="hero-meta-item">
+          <span class="hero-meta-label">Bugün</span>
+          <span class="hero-meta-value">08:00 — 23:00 arası açık</span>
+        </div>
+      </div>
+
+      <a href="#about" class="hero-scroll">
+        <span>Aşağı</span>
+        <span class="hero-scroll-line" aria-hidden="true"></span>
+      </a>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about" class="features-section">
+      <div class="container">
+          <div class="section-header">
+              <span class="section-eyebrow">Yedi asırlık alışkanlık</span>
+              <h2 class="section-title">Hakkımızda</h2>
+              <p class="section-description">
+                Bir kafe değil, kahve dükkânıyız. İşimizin tamamı çekirdeğin dükkâna girdiği an
+                ile fincana düştüğü an arasında geçiyor.
+              </p>
+          </div>
+
+          <div class="about-story">
+            <div class="about-col">
+              <p>
+                1326 Bursa, adını şehrin kurulduğu yıldan alıyor. Dükkân ilk açıldığında tek bir
+                tezgâh, bir çuval çekirdek ve elle çevrilen bir kavurma kazanı vardı. Bugün tezgâh
+                daha uzun, kazan daha büyük; geri kalan aynı. Kahveyi hâlâ aynı kapının önünde
+                teslim alıyor, aynı arka odada kavuruyoruz.
+              </p>
+              <p>
+                Çekirdeği yılda iki kez, hasat takvimine göre değiştiriyoruz. Etiyopya'nın çiçeksi yıkanmış lotları yaza, Brezilya ve Guatemala'nın koyu kakao tonlu çekirdekleri kışa kalıyor. Hiçbir çuvalı tadına bakmadan raf ömrüne almıyoruz.
+              </p>
+            </div>
+
+            <div class="about-col">
+              <p>
+                Kavurmayı küçük partiler hâlinde yapıyoruz: bir seferde en fazla altı kilo. Bu,
+                işi yavaşlatan bir tercih ama her partinin profilini tek tek takip etmemizi
+                sağlıyor. Kavrulan kahve en az kırk sekiz saat dinleniyor, on beş günü geçince
+                rafından iniyor.
+              </p>
+              <p>
+                Tezgâhın arkasındaki ekip, hangi çekirdeğin o gün hangi demleme yöntemine iyi
+                geldiğini bilir. Ne içeceğinize karar veremediyseniz sormanız yeterli — dükkânın
+                en eski geleneği bu.
+              </p>
+            </div>
+          </div>
+
+          <div class="features-flex">
+            <div class="feature-card">
+              <h3 class="feature-title">Günlük kavurma</h3>
+              <p class="feature-desc">
+                Her sabah taze kavrulan, altı kiloluk küçük partiler. Çuvalın hasat yılı ve
+                çiftliği tezgâhta yazılı.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <h3 class="feature-title">Ev yapımı tatlılar</h3>
+              <p class="feature-desc">
+                Aynı mutfakta, günlük hazırlanan pastane ürünleri. Akşama kalanı ertesi güne
+                bırakmıyoruz.
+              </p>
+            </div>
+
+            <div class="feature-card">
+              <h3 class="feature-title">Sessiz çalışma alanı</h3>
+              <p class="feature-desc">
+                Arka salonda prizli masalar, yüksek hızlı internet ve gün boyu korunan bir
+                sessizlik kuralı.
+              </p>
+            </div>
+          </div>
+      </div>
+    </section>
+
+    <!-- PROCESS -->
+     <section id="process" class="process-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Çekirdekten Fincana</span>
+          <h2 class="section-title">Nasıl Çalışıyoruz</h2>
+          <p class="section-description">
+            Her fincan, 5 adımlık acelesiz bir yolun sonunda.
+          </p>
+        </div>
+
+        <div class="process-grid">
+          <!-- Seçim - 01 -->
+          <article class="process-step step-select">
+            <div class="process-media">
+              <img src="assets/secim-01.jpg" alt="" class="process-img">
+            </div>
+
+            <div class="process-text">
+              <span class="process-number">01</span>
+              <h3 class="process-title">Seçim</h3>
+              <p class="process-desc">Hasada göre çekirdek; tadımdan geçmeden rafa girmez.</p>
+            </div>
+          </article>
+
+          <!-- Kavurma - 02 -->
+          <article class="process-step step-roast">
+            <div class="process-media">
+              <img src="assets/kavurma-02.jpg" alt="" class="process-img">
+            </div>
+
+            <div class="process-text">
+              <span class="process-number">02</span>
+              <h3 class="process-title">Kavurma</h3>
+              <p class="process-desc">Küçük parti, en fazla altı kilo; her parti tek tek profillenir.</p>
+            </div>
+          </article>
+
+          <!-- Dinlendirme - 03 -->
+          <article class="process-step step-rest">
+            <div class="process-media">
+              <img src="assets/dinlendirme-03.jpg" alt="" class="process-img">
+            </div>
+
+            <div class="process-text">
+              <span class="process-number">03</span>
+              <h3 class="process-title">Dinlendirme</h3>
+              <p class="process-desc">En az kırk sekiz saat; acele yok.</p>
+            </div>
+          </article>
+
+          <!-- Demleme - 04 -->
+          <article class="process-step step-brew">
+            <div class="process-media">
+              <img src="assets/demleme-04.jpg" alt="" class="process-img">
+            </div>
+
+            <div class="process-text">
+              <span class="process-number">04</span>
+              <h3 class="process-title">Demleme</h3>
+              <p class="process-desc">Çekirdeğe göre yöntem; elle, ölçülü.</p>
+            </div>
+          </article>
+
+          <!-- Servis - 05 -->
+          <article class="process-step step-serve">
+            <div class="process-media">
+              <img src="assets/servis-05.jpg" alt="" class="process-img">
+            </div>
+
+            <div class="process-text">
+              <span class="process-number">05</span>
+              <h3 class="process-title">Servis</h3>
+              <p class="process-desc">Acelesiz dolan fincan, aynı kapının önünde.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+     </section>
+
+    <!-- MENU -->
+    <section id="menu" class="menu-section">
+        <div class="menu-wrap">
+            <div class="menu-plate">
+              <span class="menu-corner tl"><svg width="46" height="46" viewBox="0 0 42 42"><use href="#kose-dal"/></svg></span>
+              <span class="menu-corner tr"><svg width="46" height="46" viewBox="0 0 42 42"><use href="#kose-dal"/></svg></span>
+              <span class="menu-corner bl"><svg width="46" height="46" viewBox="0 0 42 42"><use href="#kose-dal"/></svg></span>
+              <span class="menu-corner br"><svg width="46" height="46" viewBox="0 0 42 42"><use href="#kose-dal"/></svg></span>
+
+              <aside class="menu-spine">
+                <svg class="menu-spine-paper" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="100%" height="100%" fill="url(#kafes)" />
+                </svg>
+
+                <svg class="menu-emblem" width="66" height="80" viewBox="0 0 100 120" aria-hidden="true">
+                  <use href="#ikon-dal"/>
+                </svg>
+
+                <span class="menu-eyebrow">Bursa · Est. 1326</span>
+                <h2 class="menu-heading">Menü</h2>
+                <div class="menu-rule" aria-hidden="true"><span></span>❦<span></span></div>
+                <p class="menu-subtitle">Her sabah kavrulur, acelesiz demlenir.</p>
+              </aside>
+
+              <div class="menu-body">
+                <svg class="menu-body-paper" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+                  <rect width="100%" height="100%" fill="url(#kafes)" />
+                </svg>
+
+                <div class="menu-tabs" role="tablist">
+                  <button class="menu-tab is-active" data-tab="espresso" role="tab">Espresso Bazlı</button>
+                  <button class="menu-tab" data-tab="filter" role="tab">Demleme &amp; Filtre</button>
+                  <button class="menu-tab" data-tab="cold" role="tab">Soğuk Kahveler</button>
+                  <button class="menu-tab" data-tab="dessert" role="tab">Fırın &amp; Tatlı</button>
+                </div>
+
+                <section class="menu-group menu-panel is-active" data-panel="espresso">
+                  <h3 class="menu-group-title"><span>Espresso Bazlı</span></h3>
+                  <div class="menu-items" data-items="espresso"></div>
+                </section>
+
+                <section class="menu-group menu-panel" data-panel="filter">
+                  <h3 class="menu-group-title"><span>Demleme &amp; Filtre</span></h3>
+                  <div class="menu-items" data-items="filter"></div>
+                </section>
+
+                <section class="menu-group menu-panel" data-panel="cold">
+                  <h3 class="menu-group-title"><span>Soğuk Kahveler</span></h3>
+                  <div class="menu-items" data-items="cold"></div>
+                </section>
+
+                <section class="menu-group menu-panel" data-panel="dessert">
+                  <h3 class="menu-group-title"><span>Fırın &amp; Tatlı</span></h3>
+                  <div class="menu-items" data-items="dessert"></div>
+                </section>
+
+                <p class="menu-note">Fiyatlara servis dahildir · Bitkisel süt alternatifleri mevcuttur</p>
+              </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACT / RESERVATION -->
+    <section id="contact" class="reservation-section">
+      <div class="container">
+        <div class="section-header">
+          <span class="section-eyebrow">Masanızı Ayırtın</span>
+          <h2 class="section-title">Rezervasyon</h2>
+          <p class="section-description">
+            Acelesiz bir kahve için yerinizi önceden ayıralım.
+          </p>
+        </div>
+
+        <form action="#" class="reservation-form">
+          <div class="form-fields">
+
+            <!-- İsim Soyisim  -->
+            <div class="form-field field-name">
+              <label for="text">İsim Soyisim</label>
+              <input type="text" form="res-name" name="name" placeholder="Adınız Soyadınız" required>
+            </div>
+
+            <!-- Telefon No -->
+            <div class="form-field field-name">
+              <label for="res-phone">Telefon</label>
+              <input type="tel" form="res-phone" name="phone" placeholder="05XX XXX XX XX" required>
+            </div>
+
+            <!-- E-posta -->
+            <div class="form-field field-name">
+              <label for="res-email">E-posta</label>
+              <input type="email" form="res-email" name="email" placeholder="ornek@eposta.com" required>
+            </div>
+
+            <!-- Kişi Sayısı -->
+            <div class="form-field field-guests">
+              <label for="res-guests">Kişi Sayısı</label>
+              <select id="res-guests" name="guests" required>
+                <option value="">Seçiniz</option>
+                <option value="1">1 kişi</option>
+                <option value="2">2 kişi</option>
+                <option value="3">3 kişi</option>
+                <option value="4">4 kişi</option>
+                <option value="5">5 kişi</option>
+                <option value="6">6 kişi</option>
+                <option value="7">7 kişi</option>
+                <option value="8">8 kişi</option>
+              </select>
+            </div>
+
+            <!-- Tarih -->
+            <div class="form-field field-date">
+              <label for="res-date">Tarih</label>
+              <input type="date" id="res-date" name="date" required />
+            </div>
+
+            <!-- Saat -->
+            <div class="form-field field-time">
+              <label for="res-time">Saat</label>
+              <input type="time" id="res-time" name="time" required />
+            </div>
+
+            <!-- Not -->
+            <div class="form-field field-note">
+              <label for="res-note">Not</label>
+              <textarea id="res-note" name="note" rows="3" placeholder="Özel bir isteğiniz var mı?"></textarea>
+            </div>
+          </div>
+
+          <!-- rezervasyon özeti + gönder -->
+          <aside class="reservation-summary">
+            <h3 class="summary-title">Rezervasyon Özet</h3>
+
+            <div class="summary-row">
+              <span class="summary-label">Kişi Başı</span>
+              <span class="summary-value">50₺</span>
+            </div>
+
+            <div class="summary-row summary-total">
+              <span class="summary-label">Toplam Tutar</span>
+              <span class="summary-value" id="summary-amount">- ₺</span>
+            </div>
+
+            <p class="summary-note">Tutar, kişi sayısına göre hesaplanır</p>
+
+            <button type="submit" class="btn btn-primary summary-submit">Rezerve Et</button>
+          </aside>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <svg class="footer-kafes" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+      <rect width="100%" height="100%" fill="url(#kafes)" />
+    </svg>
+
+    <div class="footer-motif" aria-hidden="true">
+      <svg width="72" height="72" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <ellipse cx="14" cy="14" rx="9" ry="11" stroke="currentColor" stroke-width="0.8"/>
+        <path d="M6 10 C 12 12, 16 12, 22 10" stroke="currentColor" stroke-width="0.6" fill="none"/>
+        <path d="M5 14 C 12 16, 16 16, 23 14" stroke="currentColor" stroke-width="0.6" fill="none"/>
+        <path d="M6 18 C 12 20, 16 20, 22 18" stroke="currentColor" stroke-width="0.6" fill="none"/>
+      </svg>
+    </div>
+
+    <div class="container footer-container">
+      <div class="footer-widget contact-info">
+        <h4 class="widget-title">ADRES</h4>
+        <p>Üniversite Cd. No: 15<br>Görükle, Nilüfer / Bursa</p>
+      </div>
+      <div class="footer-widget working-hours">
+        <h4 class="widget-title">ÇALIŞMA SAATLERİ</h4>
+        <p>Hafta İçi: 08:00 - 23:00</p>
+        <p>Hafta Sonu: 09:00 - 00:00</p>
+      </div>
+      <div class="footer-widget social-media">
+        <h4 class="widget-title">BİZİ TAKİP EDİN</h4>
+        <ul class="social-list">
+          <li><a href="#" class="social-link">Instagram</a></li>
+          <li><a href="#" class="social-link">Twitter</a></li>
+          <li><a href="#" class="social-link">Facebook</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 1326 BURSA. Tüm hakları saklıdır.</p>
+    </div>
+  </footer>
+
+  <script type="module" src="./js/main.js"></script>
+
+</body>
+</html>
