@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Gün 8 — DOM - 1</title>
-  <link rel="stylesheet" href="style.css" />
+  <title>1326 Bursa</title>
+  <link rel="stylesheet" href="./css/style.css" />
 </head>
 <body>
   <!-- Görev: aynı sayfayı Grid ile yeniden kurgula. -->
@@ -363,25 +363,28 @@
           </p>
         </div>
 
-        <form action="#" class="reservation-form">
+        <form action="#" class="reservation-form" novalidate> 
           <div class="form-fields">
 
             <!-- İsim Soyisim  -->
             <div class="form-field field-name">
               <label for="text">İsim Soyisim</label>
-              <input type="text" form="res-name" name="name" placeholder="Adınız Soyadınız" required>
+              <input type="text" id="res-name" name="name" placeholder="Adınız Soyadınız" required>
+              <span class="field-error" data-error-for="name"></span>
             </div>
 
             <!-- Telefon No -->
             <div class="form-field field-name">
               <label for="res-phone">Telefon</label>
-              <input type="tel" form="res-phone" name="phone" placeholder="05XX XXX XX XX" required>
+              <input type="tel" id="res-phone" name="phone" placeholder="05XX XXX XX XX" required>
+              <span class="field-error" data-error-for="phone"></span>
             </div>
 
             <!-- E-posta -->
             <div class="form-field field-name">
               <label for="res-email">E-posta</label>
-              <input type="email" form="res-email" name="email" placeholder="ornek@eposta.com" required>
+              <input type="email" id="res-email" name="email" placeholder="ornek@eposta.com" required>
+              <span class="field-error" data-error-for="email"></span>
             </div>
 
             <!-- Kişi Sayısı -->
@@ -398,24 +401,28 @@
                 <option value="7">7 kişi</option>
                 <option value="8">8 kişi</option>
               </select>
+              <span class="field-error" data-error-for="guests"></span>
             </div>
 
             <!-- Tarih -->
             <div class="form-field field-date">
               <label for="res-date">Tarih</label>
               <input type="date" id="res-date" name="date" required />
+              <span class="field-error" data-error-for="date"></span>
             </div>
 
             <!-- Saat -->
             <div class="form-field field-time">
               <label for="res-time">Saat</label>
               <input type="time" id="res-time" name="time" required />
+              <span class="field-error" data-error-for="time"></span>
             </div>
 
             <!-- Not -->
             <div class="form-field field-note">
               <label for="res-note">Not</label>
               <textarea id="res-note" name="note" rows="3" placeholder="Özel bir isteğiniz var mı?"></textarea>
+              <span class="field-error" data-error-for="note"></span>
             </div>
           </div>
 
@@ -436,6 +443,7 @@
             <p class="summary-note">Tutar, kişi sayısına göre hesaplanır</p>
 
             <button type="submit" class="btn btn-primary summary-submit">Rezerve Et</button>
+            <p class="reservation-feedback" id="reservation-feedback" hidden></p>
           </aside>
         </form>
       </div>
