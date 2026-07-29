@@ -866,6 +866,43 @@ header {
     min-height: 80px;
 }
 
+/* ---------- FORM DOĞRULAMA DURUMLARI ---------- */
+.field-error {
+    display: block;
+    font-family: var(--font-govde);
+    font-size: 12px;
+    color: var(--dut-moru);
+    min-height: 15px;      /* mesaj gelince/gidince zıplama olmasın */
+}
+
+.form-field.is-invalid input,
+.form-field.is-invalid select {
+    border-color: var(--dut-moru);
+}
+
+.form-field.is-valid input,
+.form-field.is-valid select {
+    border-color: var(--cam-yesili);
+}
+
+.reservation-feedback {
+    font-family: var(--font-govde);
+    font-size: 13px;
+    padding: 10px 12px;
+    border-left: 3px solid var(--bakir);
+    background: rgba(250, 246, 238, 0.08);
+}
+
+.reservation-feedback.is-success {
+    border-left-color: var(--bakir);
+    color: var(--sutlu-krem);
+}
+
+.reservation-feedback.is-error {
+    border-left-color: var(--dut-moru);
+    color: #e8c9c9;
+}
+
 /* Sağ Panel Reservation */
 .reservation-summary {
     background: var(--cam-yesili);
